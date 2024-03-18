@@ -1,0 +1,190 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+class Program
+{
+    static void Main(string[] args)
+    {
+        // Create a new instance of the Scripture class
+        List<Scripture> scriptureLibrary = new List<Scripture>();
+        // Add scriptures to the library
+        scriptureLibrary.Add(new Scripture("John 3:16", "For God so loved the world, he gaves his only begotten child so that anyone who will believe to him don't prish but get the eternal life"));
+        scriptureLibrary.Add(new Scripture("Proverbs 3:5-6", "Trust in the Lord with all your heart..."));
+        scriptureLibrary.Add(new Scripture("Jeremie 33,3", "Call me I will answer you, I will reveal you the hidden roads that you cannot see."));
+
+        Random rand = new Random();
+        Scripture selectedScripture = scriptureLibrary[rand.Next(scriptureLibrary.Count)];
+
+        // Display the complete scripture
+        DisplayScripture(selectedScripture);
+
+        // Prompt the user to press enter or type quit
+        Console.WriteLine("Press Enter to continue or type 'quit' to exit.");
+        string userInput = Console.ReadLine().ToLower();
+
+        // Hide words in the scripture until all words are hidden or user types quit
+        List<int> availableIndices = Enumerable.Range(0, selectedScripture.Words.Count).ToList();
+        while (userInput != "quit" && !selectedScripture.AllWordsHidden)
+        {
+            HideRandomWord(selectedScripture, availableIndices);
+            DisplayScripture(selectedScripture);
+            Console.WriteLine("Press Enter to continue or type 'quit' to exit.");
+            userInput = Console.ReadLine().ToLower();
+        }
+
+        Console.WriteLine("Program ended.");
+
+    }
+    // Method to randomly hide a word in the scripture
+    static void HideRandomWord(Scripture scripture, List<int> availableIndices)
+    {
+        Random rand = new Random();
+        int index = rand.Next(availableIndices.Count);
+        int wordIndex = availableIndices[index];
+        availableIndices.RemoveAt(index); // Remove the index from the list
+        scripture.HideWord(wordIndex);
+    }
+
+    // Method to display the complete scripture with hidden words
+    static void DisplayScripture(Scripture scripture)
+    {
+        Console.Clear();
+        Console.WriteLine($"Scripture: {scripture.Reference}");
+        Console.WriteLine(scripture.GetVisibleText());
+    }
+}
+
+class Scripture
+{
+    public Reference Reference { get; private set; }
+    private List<Word> _words;
+
+    public Scripture(string reference, string text)
+    {
+        Reference = new Reference(reference);
+        _words = text.Split(' ').Select(word => new Word(word)).ToList();
+    }
+
+    public void HideRandomWords(int numberToHide)
+    {
+        Random rand = new Random();
+        List<int> availableIndices = Enumerable.Range(0, _words.Count).ToList();
+        for (int i = 0; i < numberToHide; i++)
+        {
+            int index = rand.Next(availableIndices.Count);
+            _words[index].Hide();
+            availableIndices.RemoveAt(index);
+        }
+    }
+
+    public string GetVisibleText()
+    {
+        return $"{Reference.GetFullReference()}\n{_words.Aggregate("", (text, word) => text += word.GetDisplayText() + " ")}";
+    }
+
+    public bool IsCompletelyHidden()
+    {
+        return _words.All(word => word.IsHidden());
+    }
+}
+
+class Word
+{
+    private string _text;
+    private bool _isHidden;
+
+    public Word(string text)
+    {
+        _text = text;
+    }
+
+    public void Hide()
+    {
+        _isHidden = true;
+    }
+
+    public void Show()
+    {
+        _isHidden = false;
+    }
+
+    public bool IsHidden()
+    {
+        return _isHidden;
+    }
+
+    public string GetDisplayText()
+    {
+        return _isHidden ? new string('_', _text.Length) : _text;
+    }
+}
+
+class Reference
+{
+    public string Book { get; private set; }
+    public int Chapter { get; private set; }
+    public int StartVerse { get; private set; }
+    public int EndVerse { get; private set; }
+
+    public Reference(string book, int chapter, int verse)
+    {
+        string[] parts = reference.Split(':');
+        if (parts.Length >= 2)
+        {
+            Book = parts[0];
+            string[] verses = parts[1].Split('-');
+            Chapter = int.Parse(verses[0]);
+            if (verses.Length > 1)
+            {
+                EndVerse = int.Parse(verses[1]);
+            }
+            else
+            {
+                EndVerse = StartVerse;
+            }
+        }
+        else
+        {
+            // Handle the case where the reference format is incorrect
+            // For example, log an error or throw an exception
+            Console.WriteLine("Error");
+        }
+    }
+
+    public Reference(string book, int chapter, int startVerse, int endVerse)
+    {
+        string[] parts = reference.Split(':');
+        if (parts.Length >= 2)
+        {
+            Book = parts[0];
+            string[] verses = parts[1].Split('-');
+            Chapter = int.Parse(verses[0]);
+            if (verses.Length > 1)
+            {
+                EndVerse = int.Parse(verses[1]);
+            }
+            else
+            {
+                EndVerse = StartVerse;
+            }
+        }
+        else
+        {
+            // Handle the case where the reference format is incorrect
+            // For example, log an error or throw an exception
+            Console.WriteLine("Error");
+        }
+    }
+
+    public string GetFullReference()
+    {
+        if (StartVerse == EndVerse)
+        {
+            return $"{Book} {Chapter}:{StartVerse}";
+        }
+        else
+        {
+            return $"{Book} {Chapter}:{StartVerse}-{EndVerse}";
+        }
+    }
+}
