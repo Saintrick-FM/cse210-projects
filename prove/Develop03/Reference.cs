@@ -3,57 +3,44 @@ using System.Collections.Generic;
 using System.Linq;
 class Reference
 {
-    public string Book { get; private set; }
-    public int Chapter { get; private set; }
-    public int StartVerse { get; private set; }
-    public int EndVerse { get; private set; }
+    private string _book;
+    private int _chapter;
+    private int _verse;
+    private int _endVerse;
 
-    // Constructor for single verse reference
-    public Reference(string reference)
+    public Reference(string book, int chapter, int verse)
     {
-        string[] parts = reference.Split(':');
-        if (parts.Length >= 2)
-        {
-            Book = parts[0];
-            string[] verses = parts[1].Split('-');
-            Chapter = int.Parse(verses[0]);
-            if (verses.Length > 1)
-            {
-                EndVerse = int.Parse(verses[1]);
-            }
-            else
-            {
-                EndVerse = StartVerse;
-            }
-        }
-        else
-        {
-            // Handle the case where the reference format is incorrect
-            // For example, log an error or throw an exception
-            Console.WriteLine("Error");
-        }
+        _book = book;
+        _chapter = chapter;
+        _verse = verse;
+        _endVerse = verse;
+
     }
-    // Constructor for verse range reference
-    public Reference(string startReference, string endReference)
+    public Reference(string book, int chapter, int startVerse, int endVerse)
     {
-        string[] startParts = startReference.Split(':');
-        string[] endParts = endReference.Split(':');
-        Book = startParts[0];
-        Chapter = int.Parse(startParts[1].Split()[0]);
-        StartVerse = int.Parse(startParts[1].Split()[1]);
-        EndVerse = int.Parse(endParts[1].Split()[1]);
+        _book = book;
+        _chapter = chapter;
+        _verse = startVerse;
+        _endVerse = endVerse;
     }
 
+
+    public override string ToString()
+    {
+        return GetDisplayText();
+    }
     // Method to get the full reference string
-    public string GetFullReference()
+    public string GetDisplayText()
     {
-        if (StartVerse == EndVerse)
+        // Console.WriteLine($"Book = {_book} _chapter = {_chapter} verse = {_verse} endverse = {_endVerse}");
+        if (_verse == _endVerse)
         {
-            return $"{Book} {Chapter}:{StartVerse}";
+
+            return $"{_book} {_chapter}:{_verse}";
         }
         else
         {
-            return $"{Book} {Chapter}:{StartVerse}-{EndVerse}";
+            return $"{_book} {_chapter}:{_verse}-{_endVerse}";
         }
     }
 }
