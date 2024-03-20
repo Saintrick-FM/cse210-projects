@@ -7,7 +7,8 @@ class Reference
     private int _chapter;
     private int _verse;
     private int _endVerse;
-
+    
+    // Constructor with 3 parameters
     public Reference(string book, int chapter, int verse)
     {
         _book = book;
@@ -16,6 +17,7 @@ class Reference
         _endVerse = verse;
 
     }
+    // Constructor with 4 parameters
     public Reference(string book, int chapter, int startVerse, int endVerse)
     {
         _book = book;
@@ -24,15 +26,8 @@ class Reference
         _endVerse = endVerse;
     }
 
-
-    public override string ToString()
-    {
-        return GetDisplayText();
-    }
-    // Method to get the full reference string
     public string GetDisplayText()
     {
-        // Console.WriteLine($"Book = {_book} _chapter = {_chapter} verse = {_verse} endverse = {_endVerse}");
         if (_verse == _endVerse)
         {
 

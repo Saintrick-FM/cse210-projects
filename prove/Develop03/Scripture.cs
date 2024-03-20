@@ -5,7 +5,6 @@ class Scripture
 {
     private Reference _reference;
     private List<Word> _words;
-    // private List<bool> _hiddenWords;
 
     // Constructor
     public Scripture(Reference reference, string text)
@@ -28,47 +27,33 @@ class Scripture
     // Method to hide a word at a specific index given
     public void HideRandomWords(int numberToHide)
     {
-        _words.RemoveAt(numberToHide);
+        _words[numberToHide].Hide();
+
     }
 
-    // Method to get the visible text of the scripture
+    
     public string GetDisplayText()
     {
-        Console.Clear();
-        Console.WriteLine($"{_reference.ToString()}");
-
         string visibleText = "";
-        if (_words.Count > 0)
+
+        for (int i = 0; i < _words.Count; i++)
         {
-            for (int i = 0; i < _words.Count; i++)
-            {
-
-                visibleText += new string('_', _words[i].GetDisplayText().Length) + " ";
-
-            }
-            Console.WriteLine($" visibleText.Trim() = {visibleText.Trim()}");
-            return visibleText.Trim();
+            visibleText += _words[i].GetDisplayText() + ' ';
         }
-        else
-        {
-            return visibleText;
-        }
-
+        return visibleText;
     }
 
-    public bool isCompletlyHidden()
+    public bool IsCompletlyHidden()
     {
-        if (_words.Count == 0)
+        foreach (Word word in _words)
         {
-            Console.WriteLine("_words is empty.");
-            return true;
+            if (!word.IsHidden())
+            {
+                return false; // If any word is not hidden, return false
+            }
         }
-        else
-        {
-            Console.WriteLine("_words is not empty yet.");
-            return false;
-        }
-
+        Console.Write("All words are hidden! ");
+        return true; // All words are hidden, return true
     }
 
     //Property to get the list of words

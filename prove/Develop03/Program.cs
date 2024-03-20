@@ -6,54 +6,33 @@ class Program
 {
     static void Main(string[] args)
     {
-        // Create a new instance of the Scripture class
         Reference reference = new Reference("1 John", 4, 20);
-        Scripture selectedScripture = new Scripture(reference, "If someone says, “I love God,” and hates his brother, he is a liar; for the one who does not love his brother whom he has seen, cannot love God whom he has not seen.");
+        Scripture scripture = new Scripture(reference, "If someone says, “I love God,” and hates his brother, he is a liar; for the one who does not love his brother whom he has seen, cannot love God whom he has not seen.");
 
-        selectedScripture.GetDisplayText();
+        List<int> availableIndices = Enumerable.Range(0, scripture.Words.Count).ToList();
+        string userInput = "null";
 
-        // Prompt the user to press enter or type quit
-        Console.WriteLine("\nPress Enter to continue or type 'quit' to finish:");
-        string userInput = Console.ReadLine().ToLower();
-
-        //Hide words in the scripture until all words are hidden or user types quit
-        List<int> availableIndices = Enumerable.Range(0, selectedScripture.Words.Count).ToList();
-
-        while (userInput != "quit" && !selectedScripture.isCompletlyHidden())
+        do
         {
-            // HideRandomWord(selectedScripture, availableIndices);
-            Random rand = new Random();
-            int index = rand.Next(availableIndices.Count);
-            int wordIndex = availableIndices[index];
-            availableIndices.RemoveAt(index); // Remove the index from the list
+            Console.Clear();
+            Random rand = new();
 
-            selectedScripture.HideRandomWords(wordIndex);
-            selectedScripture.GetDisplayText();
-
-            Console.WriteLine("Press Enter to continue or type 'quit' to finish:");
+            // Check if availableIndices is empty before accessing it
+            if (availableIndices.Count > 0 && userInput != "null")
+            {
+                int index = rand.Next(availableIndices.Count);
+                int wordIndex = availableIndices[index];
+                scripture.HideRandomWords(wordIndex);
+                availableIndices.RemoveAt(index); // Remove the index from the list
+            }
+            Console.WriteLine($"{reference.GetDisplayText()} => {scripture.GetDisplayText()}");
+            Console.WriteLine("\nPress Enter to continue or type 'quit' to finish:");
             userInput = Console.ReadLine().ToLower();
         }
-
+        while (userInput != "quit" && scripture.IsCompletlyHidden() == false);
+        
         Console.WriteLine("Program ended.");
     }
-
-    // Method to randomly hide a word in the scripture
-    // static void HideRandomWord(Scripture scripture, List<int> availableIndices)
-    // {
-    //     Random rand = new Random();
-    //     int index = rand.Next(availableIndices.Count);
-    //     int wordIndex = availableIndices[index];
-    //     availableIndices.RemoveAt(index); // Remove the index from the list
-    //     scripture.HideWord(wordIndex);
-    // }
-
-    // Method to display the complete scripture with hidden words
-    // static void DisplayScripture(Scripture scripture)
-    // {
-    //     Console.Clear();
-    //     Console.WriteLine($"Scripture: {scripture.Reference}");
-    //     Console.WriteLine(scripture.GetVisibleText());
-    // }
 
 }
 
