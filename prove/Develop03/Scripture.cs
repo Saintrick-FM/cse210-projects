@@ -31,7 +31,7 @@ class Scripture
 
     }
 
-    
+
     public string GetDisplayText()
     {
         string visibleText = "";
@@ -43,7 +43,7 @@ class Scripture
         return visibleText;
     }
 
-    public bool IsCompletlyHidden()
+    public bool IsCompletelyHidden()
     {
         foreach (Word word in _words)
         {
@@ -52,8 +52,8 @@ class Scripture
                 return false; // If any word is not hidden, return false
             }
         }
-        Console.Write("All words are hidden! ");
-        return true; // All words are hidden, return true
+        Console.Write("All words have been hidden! ");
+        return true;
     }
 
     //Property to get the list of words
