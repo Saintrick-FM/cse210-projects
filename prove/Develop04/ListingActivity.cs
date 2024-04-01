@@ -18,11 +18,12 @@ class ListingActivity : Activity
     public void Run()
     {
         DisplayStartingMessage();
-
+        DisplayGetReadyMessage();
         string prompt = GetRandomPrompt();
         Console.WriteLine(prompt);
 
         Console.WriteLine("You have a few seconds to start listing...");
+
         ShowSpinner(5); // Pause for 5 seconds
 
         // Simulate listing items

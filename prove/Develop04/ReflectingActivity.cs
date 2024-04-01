@@ -13,27 +13,41 @@ class ReflectingActivity : Activity
         };
 
         _questions = new List<string> {
-            "Why was this experience meaningful to you?",
-            "Have you ever done anything like this before?",
-            "How did you get started?",
-            "How did you feel when it was complete?",
-            "What made this time different than other times when you were not as successful?",
-            "What is your favorite thing about this experience?",
-            "What could you learn from this experience that applies to other situations?",
-            "What did you learn about yourself through this experience?",
-            "How can you keep this experience in mind in the future?"
+            "> Why was this experience meaningful to you?",
+            "> Have you ever done anything like this before?",
+            "> How did you get started?",
+            "> How did you feel when it was complete?",
+            "> What made this time different than other times when you were not as successful?",
+            "> What is your favorite thing about this experience?",
+            "> What could you learn from this experience that applies to other situations?",
+            "> What did you learn about yourself through this experience?",
+            "> How can you keep this experience in mind in the future?"
         };
     }
 
     public void Run()
     {
         DisplayStartingMessage();
-
+        DisplayGetReadyMessage();
+        ShowSpinner(5);
         string prompt = GetRandomPrompt();
+
         DisplayPrompt(prompt);
-        DisplayQuestions();
+        Console.WriteLine("When you have something in mind, Press Enter to continue...");
+
+        string input = Console.ReadLine();
+
+        while (string.IsNullOrEmpty(input))
+        {
+        Console.Write("Now ponder on each of the following questions as they related to this experience.\nYou may begin in: ");
+        ShowCountDown(5);
+        Console.Clear();
+        GetRandomQuestion();
+            
+        }
 
         DisplayEndingMessage();
+
     }
 
     public string GetRandomPrompt()
@@ -48,7 +62,8 @@ class ReflectingActivity : Activity
 
     public void DisplayPrompt(string prompt)
     {
-        Console.WriteLine(prompt);
+
+        Console.WriteLine($"\nConsider the following prompt:\n\n--- {prompt} ---\n");
     }
 
     public void DisplayQuestions()

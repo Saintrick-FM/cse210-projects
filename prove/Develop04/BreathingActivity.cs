@@ -1,3 +1,4 @@
+using System;
 class BreathingActivity : Activity
 {
     public BreathingActivity() : base("Breathing", "This activity will help you relax by walking you through breathing in and out slowly. Clear your mind and focus on your breathing.")
@@ -7,17 +8,20 @@ class BreathingActivity : Activity
     public void Run()
     {
         DisplayStartingMessage();
-        ShowCountDown(3);
+        DisplayGetReadyMessage();
+        ShowSpinner(5); 
+        decimal rightDuration = _duration / 3;
+        decimal countdown =  Math.Round(rightDuration);
 
-        int countdown = _duration;
         while (countdown > 0)
         {
-            Console.WriteLine("Breathe in...");
-            Thread.Sleep(1000); // Pause for 1 second
+            Console.Write("Breathe in... ");
+            ShowCountDown(3);
             countdown--;
 
-            Console.WriteLine("Breathe out...");
-            Thread.Sleep(1000); // Pause for 1 second
+            Console.Write("Breathe out... ");
+            ShowCountDown(3);
+            Console.WriteLine("\n");
             countdown--;
         }
 
