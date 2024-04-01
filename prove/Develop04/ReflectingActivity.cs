@@ -37,14 +37,33 @@ class ReflectingActivity : Activity
 
         string input = Console.ReadLine();
 
-        while (string.IsNullOrEmpty(input))
+        if (string.IsNullOrEmpty(input))
         {
-        Console.Write("Now ponder on each of the following questions as they related to this experience.\nYou may begin in: ");
-        ShowCountDown(5);
-        Console.Clear();
-        GetRandomQuestion();
-            
+            Console.Write("Now ponder on each of the following questions as they related to this experience.\nYou may begin in: ");
+            ShowCountDown(5);
+
+            int countdown = 0;
+
+            for (int i = 0; i < _questions.Count; i++)
+            {
+                if (countdown <= (_duration * 1000))
+                {
+                    countdown += 5000;
+                    Console.Clear();
+                    string randomQuestion = GetRandomQuestion();
+                    Console.Write(randomQuestion);
+                    ShowSpinner(5);
+                }
+                else
+                {
+                    break;
+                }
+
+
+            }
+
         }
+
 
         DisplayEndingMessage();
 

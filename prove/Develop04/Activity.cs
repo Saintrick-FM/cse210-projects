@@ -53,14 +53,18 @@ class Activity
     {
         List<string> spinnerChars = new List<string> { "|", "/", "-", "\\" }; // Define spinner characters
         int index = 0;
-        foreach (var item in spinnerChars)
+
+        DateTime endTime = DateTime.Now.AddSeconds(seconds); // Calculate end time
+
+        // Loop until endTime is reached
+        while (DateTime.Now < endTime)
         {
             Console.Write(spinnerChars[index]);
-            index++;
-            Thread.Sleep(200);
+            index = (index + 1) % spinnerChars.Count;
+            Thread.Sleep(100);
             Console.Write("\b \b");
         }
-            Console.WriteLine("\n");
+        Console.WriteLine("\n");
 
     }
 
