@@ -13,6 +13,7 @@ class ListingActivity : Activity
             "When have you felt the Holy Ghost this month?",
             "Who are some of your personal heroes?"
         };
+
     }
 
     public void Run()
@@ -20,15 +21,13 @@ class ListingActivity : Activity
         DisplayStartingMessage();
         DisplayGetReadyMessage();
         string prompt = GetRandomPrompt();
-        Console.WriteLine(prompt);
 
-        Console.WriteLine("You have a few seconds to start listing...");
+        DisplayPrompt(prompt);
+        Console.Write("You may begin in: ");
+        ShowCountDown(5); // Pause for 5 seconds
 
-        ShowSpinner(5); // Pause for 5 seconds
-
-        // Simulate listing items
-        int items = new Random().Next(1, 11); // Random number of items between 1 and 10
-        Console.WriteLine($"You listed {items} items.");
+        List<string> userList = GetListFromUser();
+        Console.WriteLine($"You listed {userList.Count()} items.");
 
         DisplayEndingMessage();
     }
@@ -37,17 +36,36 @@ class ListingActivity : Activity
     {
         return _prompts[new Random().Next(_prompts.Count)];
     }
+    public void DisplayPrompt(string prompt)
+    {
+        Console.WriteLine($"\nList as many responses you can to the following prompt:\n\n--- {prompt} ---");
+    }
+
 
     public List<string> GetListFromUser()
     {
         List<string> list = new List<string>();
-        Console.WriteLine("Enter items (press Enter after each item, type 'done' to finish):");
-        string input = Console.ReadLine();
-        while (input != "done")
+        string input;
+
+        using (var timer = new System.Timers.Timer(_duration * 1000)) // Timer in milliseconds
         {
-            list.Add(input);
-            input = Console.ReadLine();
+            timer.Elapsed += (sender, e) => timer.Stop(); // Stop timer after duration
+            timer.Start();
+
+            do
+            {
+                Console.Write("> ");
+                input = Console.ReadLine();
+
+                // Add input only if it's not empty
+                if (!string.IsNullOrEmpty(input))
+                {
+                    list.Add(input);
+                    _count++;
+                }
+            } while (timer.Enabled && input != null && input.Trim() != ""); // Exit on empty line or timer stop
         }
+
         return list;
     }
 }

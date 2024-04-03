@@ -2,6 +2,7 @@ class ReflectingActivity : Activity
 {
     private List<string> _prompts;
     private List<string> _questions;
+    private List<string> _availableQuestions;
 
     public ReflectingActivity() : base("Reflecting", "This activity will help you reflect on times in your life when you have shown strength and resilience. This will help you recognize the power you have and how you can use it in other aspects of your life.")
     {
@@ -23,6 +24,8 @@ class ReflectingActivity : Activity
             "> What did you learn about yourself through this experience?",
             "> How can you keep this experience in mind in the future?"
         };
+        // Initialize _availableQuestions with the same questions as _questions
+        _availableQuestions = new List<string>(_questions);
     }
 
     public void Run()
@@ -44,15 +47,24 @@ class ReflectingActivity : Activity
 
             int countdown = 0;
 
-            for (int i = 0; i < _questions.Count; i++)
+            for (int i = 0; i <= _availableQuestions.Count; i++)
             {
+
                 if (countdown <= (_duration * 1000))
                 {
-                    countdown += 5000;
                     Console.Clear();
                     string randomQuestion = GetRandomQuestion();
-                    Console.Write(randomQuestion);
-                    ShowSpinner(5);
+                    //Stop the activity if there is no more available question
+                    if (randomQuestion == "")
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        Console.Write(randomQuestion);
+                        ShowSpinner(5);
+                    }
+                    countdown += 5000;
                 }
                 else
                 {
@@ -63,8 +75,6 @@ class ReflectingActivity : Activity
             }
 
         }
-
-
         DisplayEndingMessage();
 
     }
@@ -76,7 +86,20 @@ class ReflectingActivity : Activity
 
     public string GetRandomQuestion()
     {
-        return _questions[new Random().Next(_questions.Count)];
+        if (_availableQuestions.Count == 0)
+        {
+            // If no more questions are available, return an empty string
+            return "";
+        }
+
+        // Pick a random question from _availableQuestions
+        int index = new Random().Next(_availableQuestions.Count);
+        string randomQuestion = _availableQuestions[index];
+
+        // Remove the question from _availableQuestions
+        _availableQuestions.RemoveAt(index);
+
+        return randomQuestion;
     }
 
     public void DisplayPrompt(string prompt)
@@ -93,4 +116,5 @@ class ReflectingActivity : Activity
             Thread.Sleep(2000); // Pause for 2 seconds
         }
     }
+
 }

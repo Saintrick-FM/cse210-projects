@@ -12,22 +12,22 @@ class Program
             Console.Write("Select a choice from the menu: ");
 
             int choice = Convert.ToInt32(Console.ReadLine());
+            BreathingActivity breathingActivity = new BreathingActivity();
+            ReflectingActivity reflectingActivity = new ReflectingActivity();
+            ListingActivity listingActivity = new ListingActivity();
 
             switch (choice)
             {
                 case 1:
                     Console.Clear();
-                    BreathingActivity breathingActivity = new BreathingActivity();
                     breathingActivity.Run();
                     break;
                 case 2:
                     Console.Clear();
-                    ReflectingActivity reflectingActivity = new ReflectingActivity();
                     reflectingActivity.Run();
                     break;
                 case 3:
                     Console.Clear();
-                    ListingActivity listingActivity = new ListingActivity();
                     listingActivity.Run();
                     break;
                 case 4:

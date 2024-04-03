@@ -9,11 +9,13 @@ class Activity
     protected string _description;
     protected int _duration;
 
+
     public Activity(string name, string description)
     {
         _name = name;
         _description = description;
         _duration = 50; // Duration initialized to 0, to be set later
+
     }
 
     public void DisplayStartingMessage()
@@ -35,16 +37,12 @@ class Activity
 
 
     }
-    public void DisplayGetReadyMessage()
-    {
-        Console.Clear();
-        Console.WriteLine("Get ready...");
-    }
+
     public void DisplayEndingMessage()
     {
-        Console.WriteLine($"Good job! You have completed the {_name} activity.");
+        Console.WriteLine("Well done!!");
         ShowSpinner(5);
-        Console.WriteLine($"Duration: {_duration} seconds");
+        Console.WriteLine($"You have completed another {_duration} seconds of the {_name} activity.");
         ShowSpinner(5);
         Console.Clear();
     }
@@ -61,7 +59,7 @@ class Activity
         {
             Console.Write(spinnerChars[index]);
             index = (index + 1) % spinnerChars.Count;
-            Thread.Sleep(100);
+            Thread.Sleep(300);
             Console.Write("\b \b");
         }
         Console.WriteLine("\n");
@@ -78,4 +76,10 @@ class Activity
         }
         Console.WriteLine();
     }
+    public void DisplayGetReadyMessage()
+    {
+        Console.Clear();
+        Console.WriteLine("Get ready...");
+    }
+
 }

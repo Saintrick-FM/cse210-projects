@@ -9,22 +9,23 @@ class BreathingActivity : Activity
     {
         DisplayStartingMessage();
         DisplayGetReadyMessage();
-        ShowSpinner(5); 
+        ShowSpinner(5);
         decimal rightDuration = _duration / 3;
-        decimal countdown =  Math.Round(rightDuration);
+        decimal countdown = Math.Round(rightDuration);
 
-        while (countdown > 0)
+        do
         {
             Console.Write("Breathe in... ");
-            ShowCountDown(3);
+            ShowCountDown(4);
             countdown--;
 
             Console.Write("Breathe out... ");
-            ShowCountDown(3);
+            ShowCountDown(4);
             Console.WriteLine("\n");
             countdown--;
         }
-
+        while (countdown > 0);
         DisplayEndingMessage();
     }
+
 }
