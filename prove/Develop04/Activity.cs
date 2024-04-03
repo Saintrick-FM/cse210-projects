@@ -9,7 +9,6 @@ class Activity
     protected string _description;
     protected int _duration;
 
-
     public Activity(string name, string description)
     {
         _name = name;
@@ -51,7 +50,6 @@ class Activity
     {
         List<string> spinnerChars = new List<string> { "|", "/", "-", "\\" }; // Define spinner characters
         int index = 0;
-
         DateTime endTime = DateTime.Now.AddSeconds(seconds); // Calculate end time
 
         // Loop until endTime is reached

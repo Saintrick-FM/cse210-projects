@@ -37,7 +37,6 @@ class ReflectingActivity : Activity
 
         DisplayPrompt(prompt);
         Console.WriteLine("When you have something in mind, Press Enter to continue...");
-
         string input = Console.ReadLine();
 
         if (string.IsNullOrEmpty(input))
@@ -45,14 +44,12 @@ class ReflectingActivity : Activity
             Console.Write("Now ponder on each of the following questions as they related to this experience.\nYou may begin in: ");
             ShowCountDown(5);
 
-            int countdown = 0;
-
-            for (int i = 0; i <= _availableQuestions.Count; i++)
+            using (var timer = new System.Timers.Timer(_duration * 1000)) // Timer in milliseconds
             {
-
-                if (countdown <= (_duration * 1000))
+                timer.Elapsed += (sender, e) => timer.Stop(); // Stop timer after duration
+                timer.Start();
+                do
                 {
-                    Console.Clear();
                     string randomQuestion = GetRandomQuestion();
                     //Stop the activity if there is no more available question
                     if (randomQuestion == "")
@@ -61,19 +58,12 @@ class ReflectingActivity : Activity
                     }
                     else
                     {
+                        Console.Clear();
                         Console.Write(randomQuestion);
-                        ShowSpinner(5);
+                        ShowSpinner(3);
                     }
-                    countdown += 5000;
-                }
-                else
-                {
-                    break;
-                }
-
-
+                } while (timer.Enabled && _availableQuestions.Count > 0); // Exit on empty line or timer stop
             }
-
         }
         DisplayEndingMessage();
 
@@ -104,7 +94,6 @@ class ReflectingActivity : Activity
 
     public void DisplayPrompt(string prompt)
     {
-
         Console.WriteLine($"\nConsider the following prompt:\n\n--- {prompt} ---\n");
     }
 

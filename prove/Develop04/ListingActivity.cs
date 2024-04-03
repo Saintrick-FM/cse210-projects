@@ -41,7 +41,6 @@ class ListingActivity : Activity
         Console.WriteLine($"\nList as many responses you can to the following prompt:\n\n--- {prompt} ---");
     }
 
-
     public List<string> GetListFromUser()
     {
         List<string> list = new List<string>();
