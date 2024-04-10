@@ -15,9 +15,9 @@ class Program
     //     manager.LoadGoals();
 
     //     // Sample usage
-    //     manager.CreateGoal("Read Scriptures", "Read scriptures daily", 100, GoalType.Eternal);
-    //     manager.CreateGoal("Run Marathon", "Complete a marathon", 1000, GoalType.Simple);
-    //     manager.CreateGoal("Attend Temple", "Attend the temple", 50, GoalType.Checklist, 10, 500);
+    //     manager.CreateGoal("Read Scriptures", "Read scriptures daily", 100, GoalType.EternalGoal);
+    //     manager.CreateGoal("Run Marathon", "Complete a marathon", 1000, GoalType.SimpleGoal);
+    //     manager.CreateGoal("Attend Temple", "Attend the temple", 50, GoalType.ChecklistGoal, 10, 500);
 
     //     manager.ListGoalNames();
 

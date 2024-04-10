@@ -1,0 +1,4 @@
+0
+SimpleGoal:New simple, desc, 200, False
+EternalGoal:New eternal, 500, 500
+ChecklistGoal:New chacklist, desc, 400, 50, 4, 0

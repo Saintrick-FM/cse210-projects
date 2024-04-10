@@ -21,10 +21,12 @@ class GoalManager
 
     public void ListGoalDetails()
     {
-        Console.WriteLine("The types of goals are:");
+        Console.WriteLine("The goals are:");
+        int count = 1;
         foreach (Goal goal in _goals)
         {
-            Console.WriteLine(goal.GetStringRepresentation());
+            Console.WriteLine($"{count}. {goal.GetStringRepresentation()}");
+            count++;
         }
     }
 
@@ -32,13 +34,13 @@ class GoalManager
     {
         switch (type)
         {
-            case GoalType.Simple:
+            case GoalType.SimpleGoal:
                 _goals.Add(new SimpleGoal(name, description, points));
                 break;
-            case GoalType.Eternal:
+            case GoalType.EternalGoal:
                 _goals.Add(new EternalGoal(name, description, points));
                 break;
-            case GoalType.Checklist:
+            case GoalType.ChecklistGoal:
                 _goals.Add(new ChecklistGoal(name, description, points, target, bonus));
                 break;
             default:
@@ -60,42 +62,63 @@ class GoalManager
         }
     }
 
-    public void SaveGoals()
+    public void SaveGoals(string filename)
     {
-        // string json = Newtonsoft.Json.JsonConvert.SerializeObject(_goals);
-        // File.WriteAllText("_goals.json", json);
-        // Console.WriteLine("Goals saved to file.");
+        using (StreamWriter writer = new StreamWriter(filename))
+        {
+            writer.WriteLine($"{_score}");
+            foreach (var goal in _goals)
+            {
+                writer.WriteLine($"{goal.GetDetailsString()}");
+            }
+        }
     }
+
     public void DisplayPlayerInfo()
     {
         Console.WriteLine($"\nYou have {_score} points.\n");
     }
 
-    public void LoadGoals()
-    {
-        if (File.Exists("_goals.json"))
-        {
-            string json = File.ReadAllText("goals.json");
-            // _goals = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Goal>>(json);
-            Console.WriteLine("Goals loaded from file.");
-        }
-        else
-        {
-            Console.WriteLine("No saved goals found.");
-        }
-    }
+    // public void LoadGoals(string filename)
+    // {
+    //     if (File.Exists(filename))
+    //     {
 
+    //         string[] lines = System.IO.File.ReadAllLines(filename);
+    //         if (lines.Length > 1)
+    //         {
+    //             foreach (string line in lines)
+    //             {
+    //                 string[] entriesData = line.Split("-");
+    //                 Entry loadedEntry = new Entry(entriesData[0], entriesData[1], entriesData[2]);
+    //                 _entries.Add(loadedEntry);
+    //                 Journal journal = new Journal();
+    //                 DisplayAll();
+    //             }
+
+    //         }
+    //         else
+    //         {
+    //             Console.WriteLine("No entry found");
+    //         }
+
+    //     }
+    //     else
+    //     {
+    //         Console.WriteLine("File not found. Please check the filename and try again.");
+    //     }
+    // }
 
     public GoalType ConvertToGoalType(string typeChoice)
     {
         switch (typeChoice)
         {
             case "1":
-                return GoalType.Simple;
+                return GoalType.SimpleGoal;
             case "2":
-                return GoalType.Eternal;
+                return GoalType.EternalGoal;
             case "3":
-                return GoalType.Checklist;
+                return GoalType.ChecklistGoal;
             default:
                 throw new ArgumentException("Invalid goal type choice.");
         }
@@ -112,11 +135,6 @@ class GoalManager
             Console.WriteLine("  4. Load Goals");
             Console.WriteLine("  5. Record Event");
             Console.WriteLine("  6. Quit");
-
-            // Goal simple = new Goal("Simple Goal", "This is just a simple goal", 300);
-            // Goal eternal = new Goal("Eternal Goal", "This is just a simple goal", 1000);
-            // Goal checklist = new Goal("CheckList Goal", "This is just a simple goal", 500);
-
             Console.Write("Select a choice from the menu: ");
 
             int choice = Convert.ToInt32(Console.ReadLine());
@@ -130,10 +148,11 @@ class GoalManager
                 case 2:
                     ListGoalDetails();
                     break;
-                // case 3:
-                //     Console.Clear();
-                //     listingActivity.Run();
-                //     break;
+                case 3:
+                    Console.Write("What is the filename for the goal file? ");
+                    string fileName = Console.ReadLine();
+                    SaveGoals(fileName);
+                    break;
                 // case 4:
                 //     Console.Clear();
                 //     listingActivity.Run();
@@ -153,10 +172,9 @@ class GoalManager
     public string ChooseTypeOfGoal()
     {
         Console.WriteLine("The types of Goals are:");
-
-        Console.WriteLine("  1. Simple Goal");
-        Console.WriteLine("  2. Eternal Goal");
-        Console.WriteLine("  3. Checklist Goal");
+        Console.WriteLine("  1. SimpleGoal Goal");
+        Console.WriteLine("  2. EternalGoal Goal");
+        Console.WriteLine("  3. ChecklistGoal Goal");
         Console.Write("Which type of goal would you like to create? ");
         string typeChoice = Console.ReadLine();
 
