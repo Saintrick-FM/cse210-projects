@@ -26,5 +26,5 @@ class EternalGoal : Goal
     {
         return $"[ ] {_shortName} ({_description})";
     }
-    // public string GoalType { get { return _goalType; } }
+
 }

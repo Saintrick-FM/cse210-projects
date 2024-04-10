@@ -14,9 +14,8 @@ abstract class Goal
 
     public string Name { get { return _shortName; } }
     public int Points { get { return _points; } }
-    public int Description { get { return _points; } }
+    public string Description { get { return _description; } }
 
-    // public int Type { get { return _goalType; } }
 
     public Goal(string name, string description, int points)
     {

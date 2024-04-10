@@ -39,6 +39,6 @@ class ChecklistGoal : Goal
     {
         return $"[{(IsComplete() ? 'X' : ' ')}] {_shortName} ({_description}) -- Currently completed: {_amountCompleted}/{_target}";
     }
-    // public GoalType Type { get { return _goalType; } }
+
     public int Bonus { get { return _bonus; } }
 }

@@ -40,5 +40,5 @@ class SimpleGoal : Goal
     {
         return $"[{(_isComplete ? 'X' : ' ')}] {_shortName} ({_description})";
     }
-    // public string GoalType { get { return _goalType; } }
+
 }

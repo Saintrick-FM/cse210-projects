@@ -1,4 +1,5 @@
-400
-SimpleGoal:Simple one,desc,100,True
-EternalGoal:Eternal one,desc,100
-ChecklistGoal:Checklist one,desc,200,50,2,1
+850
+SimpleGoal:Give a talk,Speak in sacrament...,100,True
+EternalGoal:Study the scriptures...,Study at least 10 minutes,50
+ChecklistGoal:Attend the temple,Attend and perform any ordinance,50,500,3,3
+ChecklistGoal:Wake up early,Wake up by at least 6:00am,10,1000,10,0

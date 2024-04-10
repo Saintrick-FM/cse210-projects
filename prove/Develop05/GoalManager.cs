@@ -54,15 +54,22 @@ class GoalManager
     {
         if (goalId >= 0 && goalId <= _goals.Count)
         {
-            _goals[goalId - 1].RecordEvent();
-            _score += _goals[goalId - 1].Points;
-            Console.WriteLine($"\nCongratulations! You have earned {_goals[goalId - 1].Points} points.");
+            Goal currentGoal = _goals[goalId - 1];
+            currentGoal.RecordEvent();
+            _score += currentGoal.Points;
 
-            // if (_goals[goalId - 1].Type == GoalType.ChecklistGoal)
-            // {
-            //     _score += _goals[goalId - 1].Bonus;
-            // }
-
+            if (currentGoal is ChecklistGoal checklistGoal)
+            {
+                if (checklistGoal.IsComplete() == true)
+                {
+                    _score += checklistGoal.Bonus;
+                    Console.WriteLine($"\nCongratulations! You have earned {currentGoal.Points + checklistGoal.Bonus} points.");
+                }
+                else
+                {
+                    Console.WriteLine($"\nCongratulations! You have earned {currentGoal.Points} points.");
+                }
+            }
             Console.WriteLine($"You now have {_score} points.\n");
         }
         else
@@ -109,18 +116,18 @@ class GoalManager
                     {
                         if (parts[3] == "True")
                         {
-                            CreateGoal(name, description, points, ConvertIntToGoalType("1"), 0, 0, true);
+                            CreateGoal(name, description, points, ConvertToGoalType("1"), 0, 0, true);
                         }
                         else
                         {
-                            CreateGoal(name, description, points, ConvertIntToGoalType("1"), 0, 0, false);
+                            CreateGoal(name, description, points, ConvertToGoalType("1"), 0, 0, false);
                         }
                     }
 
                     if (goalChoosed == "EternalGoal")
                     {
 
-                        CreateGoal(name, description, points, ConvertIntToGoalType("2"), 0, 0, false);
+                        CreateGoal(name, description, points, ConvertToGoalType("2"), 0, 0, false);
                     }
 
                     if (goalChoosed == "ChecklistGoal")
@@ -128,7 +135,7 @@ class GoalManager
                         int bonus = int.Parse(parts[3]);
                         int target = int.Parse(parts[4]);
                         int amountCompleted = int.Parse(parts[5]);
-                        CreateGoal(name, description, points, ConvertIntToGoalType("3"), target, bonus, false, amountCompleted);
+                        CreateGoal(name, description, points, ConvertToGoalType("3"), target, bonus, false, amountCompleted);
                     }
 
                 }
@@ -146,7 +153,7 @@ class GoalManager
         }
     }
 
-    public GoalType ConvertIntToGoalType(string typeChoice)
+    public GoalType ConvertToGoalType(string typeChoice)
     {
         switch (typeChoice)
         {
@@ -160,20 +167,7 @@ class GoalManager
                 throw new ArgumentException("Invalid goal type choice.");
         }
     }
-    public GoalType ConvertStringToGoalType(string typeChoice)
-    {
-        switch (typeChoice)
-        {
-            case "SimpleGoal":
-                return GoalType.SimpleGoal;
-            case "EternalGoal":
-                return GoalType.EternalGoal;
-            case "ChecklistGoal":
-                return GoalType.ChecklistGoal;
-            default:
-                throw new ArgumentException("Invalid goal type choice.");
-        }
-    }
+
     public void Start()
     {
         while (true)
@@ -187,42 +181,50 @@ class GoalManager
             Console.WriteLine("  5. Record Event");
             Console.WriteLine("  6. Quit");
             Console.Write("Select a choice from the menu: ");
-
-            int choice = Convert.ToInt32(Console.ReadLine());
-
-            switch (choice)
+            try
             {
-                case 1:
-                    string goalChoosed = ChooseTypeOfGoal();
-                    GoalCreation(goalChoosed);
-                    break;
-                case 2:
-                    ListGoalDetails();
-                    break;
-                case 3:
-                    Console.Write("What is the filename for the goal file? ");
-                    string fileName = Console.ReadLine();
-                    SaveGoals(fileName);
-                    break;
-                case 4:
-                    Console.Write("What is the filename for the goal file? ");
-                    string input = Console.ReadLine();
-                    LoadGoals(input);
-                    break;
-                case 5:
-                    ListGoalNames();
-                    Console.Write("Which goal did you accomplish? ");
-                    int userChoice = Convert.ToInt32(Console.ReadLine());
-                    RecordEvent(userChoice);
+                int choice = Convert.ToInt32(Console.ReadLine());
 
-                    break;
-                case 6:
-                    Environment.Exit(0);
-                    break;
-                default:
-                    Console.WriteLine("Invalid choice. Please try again.");
-                    break;
+                switch (choice)
+                {
+                    case 1:
+                        string goalChoosed = ChooseTypeOfGoal();
+                        GoalCreation(goalChoosed);
+                        break;
+                    case 2:
+                        ListGoalDetails();
+                        break;
+                    case 3:
+                        Console.Write("What is the filename for the goal file? ");
+                        string fileName = Console.ReadLine();
+                        SaveGoals(fileName);
+                        break;
+                    case 4:
+                        Console.Write("What is the filename for the goal file? ");
+                        string input = Console.ReadLine();
+                        LoadGoals(input);
+                        break;
+                    case 5:
+                        ListGoalNames();
+                        Console.Write("Which goal did you accomplish? ");
+                        int userChoice = Convert.ToInt32(Console.ReadLine());
+                        RecordEvent(userChoice);
+
+                        break;
+                    case 6:
+                        Environment.Exit(0);
+                        break;
+                    default:
+                        Console.WriteLine($"Invalid choice!");
+                        break;
+                }
+
             }
+            catch (System.Exception)
+            {
+                Console.WriteLine($"Invalid choice!");
+            }
+
         }
     }
     public string ChooseTypeOfGoal()
@@ -254,11 +256,11 @@ class GoalManager
             target = int.Parse(Console.ReadLine());
             Console.Write("Enter bonus points: ");
             bonusPoints = int.Parse(Console.ReadLine());
-            CreateGoal(name, description, points, ConvertIntToGoalType(goalType), target, bonusPoints);
+            CreateGoal(name, description, points, ConvertToGoalType(goalType), target, bonusPoints);
         }
         else
         {
-            CreateGoal(name, description, points, ConvertIntToGoalType(goalType));
+            CreateGoal(name, description, points, ConvertToGoalType(goalType));
         }
 
 
