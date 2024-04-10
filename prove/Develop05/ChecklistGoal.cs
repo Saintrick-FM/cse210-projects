@@ -23,11 +23,11 @@ class ChecklistGoal : Goal
 
     public override string GetDetailsString()
     {
-        return $"{_name}: {_description} - {_points} points per completion, {_bonus} bonus points for {_target} completions";
+        return $"{_shortName}: {_description} - {_points} points per completion, {_bonus} bonus points for {_target} completions";
     }
 
     public override string GetStringRepresentation()
     {
-        return $"Completed {_amountCompleted}/{_target} times - {_name}";
+        return $"Completed {_amountCompleted}/{_target} times - {_shortName} ({_description})";
     }
 }

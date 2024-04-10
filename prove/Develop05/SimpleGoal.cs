@@ -26,11 +26,11 @@ class SimpleGoal : Goal
 
     public override string GetDetailsString()
     {
-        return $"{_name}: {_description} - {_points} points";
+        return $"{_shortName}: {_description} - {_points} points";
     }
 
     public override string GetStringRepresentation()
     {
-        return $"[{(_isComplete ? 'X' : ' ')}] {_name}";
+        return $"[{(_isComplete ? 'X' : ' ')}] {_shortName} ({_description})";
     }
 }
