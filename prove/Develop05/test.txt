@@ -3,3 +3,14 @@ SimpleGoal:Give a talk,Speak in sacrament...,100,True
 EternalGoal:Study the scriptures...,Study at least 10 minutes,50
 ChecklistGoal:Attend the temple,Attend and perform any ordinance,50,500,3,3
 ChecklistGoal:Wake up early,Wake up by at least 6:00am,10,1000,10,0
+
+Brief Description:
+For the open-ended project, I will develop a console-based personal expense tracker in C#. This application will enable users to manage their expenses, track their income, and set savings goals, all within the console environment. It will demonstrate principles of programming with classes by employing various classes to organize and process financial data efficiently.
+
+ The program will consist of several classes, each responsible for specific aspects of financial management. For example, there will be classes for managing transactions, budget categories, and savings goals.
+
+To demonstrate abstraction, each class will encapsulate its functionalities and interact with others to provide a cohesive financial management system. Transactions will be recorded and categorized, allowing users to view their spending patterns over time. Budget categories will allow users to allocate funds for different purposes.
+
+Encapsulation will ensure that internal details of classes are hidden, with only necessary methods exposed for interacting with the program. Inheritance will be utilized to avoid redundancy in code, with base classes defining common functionalities shared across different financial elements. Additionally, polymorphism will be employed to handle unique behaviors or calculations specific to certain types of transactions or financial goals.
+
+The application will run entirely in the console, with a text-based interface for user interaction. Users will be able to add, edit, and delete transactions, view their financial summary, and receive notifications about budget adherence and savings progress.
