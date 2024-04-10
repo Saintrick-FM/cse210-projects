@@ -19,11 +19,12 @@ class EternalGoal : Goal
 
     public override string GetDetailsString()
     {
-        return $"{_goalType}:{_shortName}, {_description}, {_points}";
+        return $"{_goalType}:{_shortName},{_description},{_points}";
     }
 
     public override string GetStringRepresentation()
     {
         return $"[ ] {_shortName} ({_description})";
     }
+    // public string GoalType { get { return _goalType; } }
 }

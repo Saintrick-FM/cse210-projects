@@ -1,4 +1,5 @@
-0
-SimpleGoal:New simple, desc, 200, False
-EternalGoal:New eternal, desc, 600
-ChecklistGoal:New checklist, desc, 500, 200, 4, 0
+250
+SimpleGoal:Simple 1,desc simple 1,500,True
+EternalGoal:Eternal 1,desc eternal 1,400
+ChecklistGoal:Checklist 1,desc checklist 1,800,500,3,3
+ChecklistGoal:Checklist 2,desc,250,60,2,1

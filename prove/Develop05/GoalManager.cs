@@ -11,11 +11,13 @@ class GoalManager
 
     public void ListGoalNames()
     {
-        Console.WriteLine("Goal Names:");
+        Console.WriteLine("The goals are:");
+        int count = 1;
         foreach (Goal goal in _goals)
         {
             string goalName = goal.Name;
-            Console.WriteLine($"{goalName}");
+            Console.WriteLine($"{count}. {goalName}");
+            count++;
         }
     }
 
@@ -30,31 +32,38 @@ class GoalManager
         }
     }
 
-    public void CreateGoal(string name, string description, int points, GoalType type, int target = 0, int bonus = 0)
+    public void CreateGoal(string name, string description, int points, GoalType type, int target = 0, int bonus = 0, bool isComplete = false, int _amountCompleted = 0)
     {
         switch (type)
         {
             case GoalType.SimpleGoal:
-                _goals.Add(new SimpleGoal(name, description, points));
+                _goals.Add(new SimpleGoal(name, description, points, isComplete));
                 break;
             case GoalType.EternalGoal:
                 _goals.Add(new EternalGoal(name, description, points));
                 break;
             case GoalType.ChecklistGoal:
-                _goals.Add(new ChecklistGoal(name, description, points, target, bonus));
+                _goals.Add(new ChecklistGoal(name, description, points, target, bonus, _amountCompleted));
                 break;
             default:
                 throw new ArgumentException("Invalid goal type.");
         }
     }
 
-    public void RecordEvent(string goalName)
+    public void RecordEvent(int goalId)
     {
-        Goal goal = _goals.Find(g => g.Name == goalName);
-        if (goal != null)
+        if (goalId >= 0 && goalId <= _goals.Count)
         {
-            goal.RecordEvent();
-            _score += goal.Points;
+            _goals[goalId - 1].RecordEvent();
+            _score += _goals[goalId - 1].Points;
+            Console.WriteLine($"\nCongratulations! You have earned {_goals[goalId - 1].Points} points.");
+
+            // if (_goals[goalId - 1].Type == GoalType.ChecklistGoal)
+            // {
+            //     _score += _goals[goalId - 1].Bonus;
+            // }
+
+            Console.WriteLine($"You now have {_score} points.\n");
         }
         else
         {
@@ -79,37 +88,65 @@ class GoalManager
         Console.WriteLine($"\nYou have {_score} points.\n");
     }
 
-    // public void LoadGoals(string filename)
-    // {
-    //     if (File.Exists(filename))
-    //     {
+    public void LoadGoals(string filename)
+    {
+        if (File.Exists(filename))
+        {
 
-    //         string[] lines = System.IO.File.ReadAllLines(filename);
-    //         if (lines.Length > 1)
-    //         {
-    //             foreach (string line in lines)
-    //             {
-    //                 string[] entriesData = line.Split("-");
-    //                 Entry loadedEntry = new Entry(entriesData[0], entriesData[1], entriesData[2]);
-    //                 _entries.Add(loadedEntry);
-    //                 Journal journal = new Journal();
-    //                 DisplayAll();
-    //             }
+            string[] lines = System.IO.File.ReadAllLines(filename);
+            if (lines.Length > 1)
+            {
+                _score += int.Parse(lines[0]);
+                for (int i = 1; i < lines.Length; i++)
+                {
+                    string goalChoosed = lines[i].Split(":")[0];
+                    string[] parts = lines[i].Split(":")[1].Split(",");
+                    string name = parts[0];
+                    string description = parts[1];
+                    int points = int.Parse(parts[2]);
 
-    //         }
-    //         else
-    //         {
-    //             Console.WriteLine("No entry found");
-    //         }
+                    if (goalChoosed == "SimpleGoal")
+                    {
+                        if (parts[3] == "True")
+                        {
+                            CreateGoal(name, description, points, ConvertIntToGoalType("1"), 0, 0, true);
+                        }
+                        else
+                        {
+                            CreateGoal(name, description, points, ConvertIntToGoalType("1"), 0, 0, false);
+                        }
+                    }
 
-    //     }
-    //     else
-    //     {
-    //         Console.WriteLine("File not found. Please check the filename and try again.");
-    //     }
-    // }
+                    if (goalChoosed == "EternalGoal")
+                    {
 
-    public GoalType ConvertToGoalType(string typeChoice)
+                        CreateGoal(name, description, points, ConvertIntToGoalType("2"), 0, 0, false);
+                    }
+
+                    if (goalChoosed == "ChecklistGoal")
+                    {
+                        int bonus = int.Parse(parts[3]);
+                        int target = int.Parse(parts[4]);
+                        int amountCompleted = int.Parse(parts[5]);
+                        CreateGoal(name, description, points, ConvertIntToGoalType("3"), target, bonus, false, amountCompleted);
+                    }
+
+                }
+
+            }
+            else
+            {
+                Console.WriteLine("No entry found");
+            }
+
+        }
+        else
+        {
+            Console.WriteLine("File not found. Please check the filename and try again.");
+        }
+    }
+
+    public GoalType ConvertIntToGoalType(string typeChoice)
     {
         switch (typeChoice)
         {
@@ -118,6 +155,20 @@ class GoalManager
             case "2":
                 return GoalType.EternalGoal;
             case "3":
+                return GoalType.ChecklistGoal;
+            default:
+                throw new ArgumentException("Invalid goal type choice.");
+        }
+    }
+    public GoalType ConvertStringToGoalType(string typeChoice)
+    {
+        switch (typeChoice)
+        {
+            case "SimpleGoal":
+                return GoalType.SimpleGoal;
+            case "EternalGoal":
+                return GoalType.EternalGoal;
+            case "ChecklistGoal":
                 return GoalType.ChecklistGoal;
             default:
                 throw new ArgumentException("Invalid goal type choice.");
@@ -153,13 +204,18 @@ class GoalManager
                     string fileName = Console.ReadLine();
                     SaveGoals(fileName);
                     break;
-                // case 4:
-                //     Console.Clear();
-                //     listingActivity.Run();
-                //     break;
-                // case 5:
-                //     Environment.Exit(0);
-                //     break;
+                case 4:
+                    Console.Write("What is the filename for the goal file? ");
+                    string input = Console.ReadLine();
+                    LoadGoals(input);
+                    break;
+                case 5:
+                    ListGoalNames();
+                    Console.Write("Which goal did you accomplish? ");
+                    int userChoice = Convert.ToInt32(Console.ReadLine());
+                    RecordEvent(userChoice);
+
+                    break;
                 case 6:
                     Environment.Exit(0);
                     break;
@@ -172,9 +228,9 @@ class GoalManager
     public string ChooseTypeOfGoal()
     {
         Console.WriteLine("The types of Goals are:");
-        Console.WriteLine("  1. SimpleGoal Goal");
-        Console.WriteLine("  2. EternalGoal Goal");
-        Console.WriteLine("  3. ChecklistGoal Goal");
+        Console.WriteLine("  1. Simple Goal");
+        Console.WriteLine("  2. Eternal Goal");
+        Console.WriteLine("  3. Checklist Goal");
         Console.Write("Which type of goal would you like to create? ");
         string typeChoice = Console.ReadLine();
 
@@ -198,11 +254,11 @@ class GoalManager
             target = int.Parse(Console.ReadLine());
             Console.Write("Enter bonus points: ");
             bonusPoints = int.Parse(Console.ReadLine());
-            CreateGoal(name, description, points, ConvertToGoalType(goalType), target, bonusPoints);
+            CreateGoal(name, description, points, ConvertIntToGoalType(goalType), target, bonusPoints);
         }
         else
         {
-            CreateGoal(name, description, points, ConvertToGoalType(goalType));
+            CreateGoal(name, description, points, ConvertIntToGoalType(goalType));
         }
 
 

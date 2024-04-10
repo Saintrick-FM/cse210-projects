@@ -8,6 +8,11 @@ class SimpleGoal : Goal
         _isComplete = false;
         _goalType = GoalType.SimpleGoal;
     }
+    public SimpleGoal(string name, string description, int points, bool isComplete) : base(name, description, points)
+    {
+        _isComplete = isComplete;
+        _goalType = GoalType.SimpleGoal;
+    }
 
     public override void RecordEvent()
     {
@@ -28,11 +33,12 @@ class SimpleGoal : Goal
 
     public override string GetDetailsString()
     {
-        return $"{_goalType}:{_shortName}, {_description}, {_points}, {_isComplete}";
+        return $"{_goalType}:{_shortName},{_description},{_points},{_isComplete}";
     }
 
     public override string GetStringRepresentation()
     {
         return $"[{(_isComplete ? 'X' : ' ')}] {_shortName} ({_description})";
     }
+    // public string GoalType { get { return _goalType; } }
 }

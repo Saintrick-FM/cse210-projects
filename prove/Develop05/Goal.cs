@@ -10,7 +10,7 @@ abstract class Goal
     protected string _shortName;
     protected string _description;
     protected int _points;
-    // protected GoalType _goalType;
+
 
     public string Name { get { return _shortName; } }
     public int Points { get { return _points; } }
